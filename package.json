@@ -1,0 +1,32 @@
+{
+    "name": "node-text-file",
+    "version": "1.0.0",
+    "description": "Simple writable and readable remote text file for small projects",
+    "main": "dist/bin/index.js",
+    "scripts": {
+        "build": "tsc",
+        "start": "ts-node src/index.ts",
+        "test": "ts-node node_modules/tape/bin/tape 'test/**/*.spec.ts' | tap-diff",
+        "watch": "nodemon --watch 'src/**/*' --watch 'test/**/*' -e ts,tsx -q -x 'npm test'"
+    },
+    "keywords": [],
+    "author": "Chris Maas <code@cmaas.de> (https://www.cmaas.de/)",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/bcrypt": "^5.0.0",
+        "@types/better-sqlite3": "^5.4.3",
+        "@types/node": "^16.3.2",
+        "@types/node-fetch": "^2.5.11",
+        "@types/tape": "^4.13.1",
+        "node-fetch": "^2.6.1",
+        "nodemon": "^2.0.12",
+        "tap-diff": "^0.1.1",
+        "tape": "^5.2.2",
+        "ts-node": "^10.1.0",
+        "typescript": "^4.3.5"
+    },
+    "dependencies": {
+        "better-sqlite3": "^7.4.1",
+        "uuid": "^8.3.2"
+    }
+}

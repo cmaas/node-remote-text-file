@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Awesome Blog</title>
+    <style>
+        @media (prefers-color-scheme: dark){
+            body {color:#fff;background:#000}
+            a:link {color:#9cf}
+            a:hover, a:visited:hover {color:#cef}
+            a:visited {color:#c9f}
+        }
+        body{
+            margin:1em auto;
+            max-width:40em;
+            padding:0 .62em;
+            font:1.2em/1.62 sans-serif;
+        }
+        h1,h2,h3 {
+            line-height:1.2;
+        }
+        @media print{
+            body{
+                max-width:none
+            }
+        }
+    </style>
+    <link rel="icon" type="image/png" href="data:image/png;base64,">
+</head>
+<body>
+    <article>
+        <h1>TextDB</h1>
+        <p>Please leave a message:</p>
+        <div>
+            <input type="text" name="message" id="commentInput">
+            <button type="submit" onClick="saveComment()">Send</button>
+        </div>
+    </article>
+    <hr>
+    <aside>
+        Comments:
+        <div id="commentsContainer">Loading comments...</div>
+    </aside>
+<script>
+const readKey = 'r-faa59c48b2a2a635b893dcca2011d0b90c32af4ff724bdab2b822708ae135ead';
+const appendKey = 'a-146f818834c1f9ae9bb8bddb9883add2db272511bd721977d8ce6827bc02fc7b';
+const commentContainer = document.getElementById('commentsContainer');
+const commentInput = document.getElementById('commentInput');
+
+function loadComments() {
+    fetch('http://localhost:8080/api/data/' + readKey).then(res => res.text()).then(text => {
+        console.log('received data', text);
+        const comments = text.split('\n').filter(comment => !!comment).join(',');
+        const json = JSON.parse('[' + comments + ']');
+        const output = json.map(comment => `<li>${comment.text} (${new Date(comment.date).toLocaleDateString()})</li>`).join('');
+        commentContainer.innerHTML = '<ul>' + output + '</ul>';
+    });
+}
+
+function saveComment() {
+    const comment = commentInput.value.trim();
+    if (! comment) {
+        return;
+    }
+    const data = JSON.stringify({ text: comment, date: Date.now() }) + '\n';
+    fetch('http://localhost:8080/api/data/append/' + appendKey, { method: 'POST', body: data }).then(res => loadComments());
+}
+
+loadComments();
+
+</script>
+</body>
+</html>
